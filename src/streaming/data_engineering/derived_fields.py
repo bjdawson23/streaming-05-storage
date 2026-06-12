@@ -35,6 +35,7 @@ from typing import Any, Final
 # which functions are intended for use outside this module.
 
 __all__ = [
+    "compute_has_customer_note",
     "TAX_RATE_DEFAULT",
     "compute_tax_amount",
     "compute_total_price",
@@ -80,6 +81,19 @@ def compute_tax_amount(total_price: float, tax_rate: float) -> float:
     return round(total_price * tax_rate, 2)
 
 
+def compute_has_customer_note(customer_note: Any) -> str:
+    """Return yes/no for whether customer_note contains text.
+
+    Arguments:
+        customer_note: Raw customer_note field value from the message.
+
+    Returns:
+        "yes" if customer_note has non-whitespace text, else "no".
+    """
+    note_text = str(customer_note).strip()
+    return "yes" if note_text else "no"
+
+
 def enrich_message(
     row: dict[str, Any],
     region_lookup: dict[str, float],
@@ -106,6 +120,7 @@ def enrich_message(
     tax_rate = get_tax_rate(region_id, region_lookup)
     total_price = compute_total_price(quantity, unit_price)
     tax_amount = compute_tax_amount(total_price, tax_rate)
+    has_customer_note = compute_has_customer_note(row.get("customer_note", ""))
 
     total = round(total_price + tax_amount, 2)
     return {
@@ -113,6 +128,7 @@ def enrich_message(
         "subtotal": total_price,
         "tax_amount": tax_amount,
         "total": total,
+        "has_customer_note": has_customer_note,
     }
 
 

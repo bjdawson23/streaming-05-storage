@@ -134,6 +134,7 @@ CONSUMED_FIELDNAMES: Final[list[str]] = [
     "subtotal",
     "tax_amount",
     "total",
+    "has_customer_note",
     "_kafka_key",
     "_kafka_partition",
     "_kafka_offset",

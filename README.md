@@ -200,6 +200,7 @@ uvx pre-commit run --all-files
 # run the producer
 clear
 uv run python -m streaming.kafka_producer_case
+uv run python -m streaming.kafka_producer_dawson
 
 # do chores
 uv run ruff format .
@@ -224,6 +225,7 @@ Clear the terminal, then start the consumer.
 ```shell
 clear
 uv run python -m streaming.kafka_consumer_case
+
 ```
 
 To start fresh, see
@@ -231,6 +233,13 @@ To start fresh, see
 to delete the topic and recreate it.
 
 </details>
+
+## Phase 4 and 5
+
+- Phase 4: added check for customer note and will output yes or no depending on note data
+- Added derived helper compute_has_customer_note in derived_fields.py
+- Added the new CSV output column has_customer_note to consumed field order in data_contract_case.py
+- Added tests for yes/no to output in test_data_engineering.py
 
 ## Notes
 
