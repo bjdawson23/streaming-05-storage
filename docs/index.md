@@ -21,57 +21,28 @@ to get these projects running on your machine.
 
 ## Custom Project
 
+My project builds on the streaming sales example and uses my Dawson consumer (kafka_consumer_dawson) to create extra downstream outputs from the data in `data/sales.csv`.
+
 ### Dataset
 
-Describe the dataset used by your Kafka producer.
-
-Include:
-
-- the name of the dataset file
-- what kind of records it contains
-- which fields are included in each record
-- whether you used the original sales dataset or modified it
+I used the original sales dataset in `data/sales.csv`. Each record contains a sale with fields such as `order_id`, `region_id`, `product_id`, `quantity`, `unit_price`, and `customer_note`.
 
 ### Kafka Messages
 
-Describe the messages sent through Kafka.
-
-Include:
-
-- what your producer sends
-- which Kafka topic you used
-- what message key you used, if any
-- whether you changed the message fields
+The producer sends the sales rows to Kafka with the same sales message structure as the case example. I kept the original topic workflow and used the region as the message key so related sales stay grouped together.
 
 ### Consumer Processing
 
-Describe what your consumer receives and does with each message.
-
-Include:
-
-- what your consumer receives from Kafka
-- how many messages it consumes
-- what it logs or prints
-- if it writes records to a CSV file
-- if it processes or filters selected fields (be specific)
+My consumer reads messages from Kafka, validates the required fields, enriches valid messages, and writes the accepted rows to CSV and DuckDB. I added a `has_customer_note` field that stores `yes` or `no` depending on whether `customer_note` has data. I also added a separate Dawson script that reads all rows from `sales.csv`, groups them by `region_name`, and writes a summary CSV plus a bar chart to `data/output`.
 
 ### Experiments
 
-Describe the small technical changes you made.
-
-Include at least one Phase 4 change and one Phase 5 application.
+For Phase 4, I added the `has_customer_note` field to the consumed output so I could see whether each sale included a note. For Phase 5, I extended the workflow with a new summary job that counts customer-note yes/no values by region and produces both tabular and visual output.
 
 ### Results
 
-Describe what happened when you ran the producer and consumer.
+Running the consumer writes consumed rows to `data/output/consumed_sales.csv` and `data/output/sales.duckdb`. Running the Dawson summary job creates `data/output/consumer_note_by_region.csv` and `data/output/consumer_note_by_region.png`.
 
 ### Interpretation
 
-Explain what the Kafka streaming workflow showed you.
-
-Include:
-
-- what changed from the original example
-- what you learned from watching messages move through Kafka
-- what the stream could tell a business or organization
-- what business intelligence was gained from the consumed messages
+The workflow showed how streaming data can be enriched at consumption time and then reused for additional analysis. The new summary by region makes it easy to compare where customer notes are more common, which could help a business spot regional differences in customer behavior or support needs.
