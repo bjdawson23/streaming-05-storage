@@ -225,6 +225,10 @@ Clear the terminal, then start the consumer.
 ```shell
 clear
 uv run python -m streaming.kafka_consumer_case
+uv run python -m streaming.kafka_consumer_dawson
+
+# build customer note summary by region
+uv run python -m streaming.customer_note_by_region_dawson
 
 ```
 
@@ -240,6 +244,14 @@ to delete the topic and recreate it.
 - Added derived helper compute_has_customer_note in derived_fields.py
 - Added the new CSV output column has_customer_note to consumed field order in data_contract_case.py
 - Added tests for yes/no to output in test_data_engineering.py
+
+- Phase 5: Created new customer_note_by_region_dawson.py.
+- Create a count of all consumer note yes or no by region_name.
+- Send the output to a new file called consumer_note_by_region.csv
+- modified .env to produce all 178 of the messages from the input csv
+- Added customer_note_by_region_dawson.py to aggregate counts from sales.csv
+- Added logic to aggregate by region_name and yes or no note presence
+- Added a bar chart image by region and not presense to the output folder
 
 ## Notes
 
